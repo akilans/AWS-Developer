@@ -83,3 +83,17 @@
 * enable CORS for cross origin
 * S3 is eventually consistent - PUT 200 -> GET 200, GET 404 -> PUT 200 -> GET 404, PUT 200 -> PUT 200 -> GET 200 (old version), DELETE 200 -> GET 200 [ Takes time to delete]
 * No way for strong consistency
+
+### VPC
+* VPC - Region scoped
+* Subnets - Availabilty scoped
+* Internet Gateway - Responsible for connecting EC2 instances from public subnet to internet
+* NAT Gateway - Responsible for connecting EC2 instances from private subnet to internet
+* Network ACL - Firewall controls trafic from and to subnets. Both allow and deny. Rules only IP address based [subnet level]
+* Security Group -  Firewall controls trafic from and to SNI to EC2 . Allows only. Rules based on IP and Another SG [EC2 instance level]
+* VPC flow logs - Capture all the networking activities as logs. Helps to troubleshoot n/w issues, Can go to S3, Cloudwatch logs
+* VPC peering - Connect 2 vpc privately using AWS network
+* VPC Endpoints - Connect to AWS services using private AWS network not via public. Used within VPC
+* Site-Site-VPN - Connect onpremise machine to AWS services. Goes via public network
+* Direct Connect - Physical connection bw aws and on premise.Secure, Private network, Low latency
+* Site-Site-VPN and Direct connect - Can't use vpc endpoints
