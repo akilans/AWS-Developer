@@ -67,3 +67,19 @@
 * Lazy loading/ cache aside - If no cache query DB and store in cache. Data outdated, IF no cache latency, -  data that is often requested will be loaded in ElastiCache
 * Write through - If any DB write, write in cache also. So no latency. this has longer writes, but the reads are quick and the data is always updated in the cache
 * Cache Eviction and Time to Live [TTL] - set time for cache, kill it after that - gaming, leader board
+
+### S3
+* Buckets - Globally unique name, Stores as objects, Region scoped
+* Naming - no underscore, no uppercase, 3-63 characters
+* s3://my-bucket/akilan.txt
+* max object size - 5TB, use multi-part upload for more than 5GB data
+* version enable in bucket level
+* 4 encryption methods - SSE- S3, SSE-KMS, SSE-C, client side encryption
+* SSE- S3 - AWS managed, encryption at server side, AES 256, set header x-amz-server-side-encryption="AES256"
+* SSE - KMS -  user control, audit trail, encryption at server side, set header x-amz-server-side-encryption="aws:kms"
+* SSE - c- encryption key stored in client location not in aws, send encryption key in header, So client need to send data + key. While retrieve send key as well. https is mandatory
+* client side - data encrypted in client side and send the sncrypted data to s3. 
+* S3 - Websites - $BUCKET_NAME.s3-website.$REGION.amazonaws.com
+* enable CORS for cross origin
+* S3 is eventually consistent - PUT 200 -> GET 200, GET 404 -> PUT 200 -> GET 404, PUT 200 -> PUT 200 -> GET 200 (old version), DELETE 200 -> GET 200 [ Takes time to delete]
+* No way for strong consistency
