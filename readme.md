@@ -83,3 +83,20 @@
 * enable CORS for cross origin
 * S3 is eventually consistent - PUT 200 -> GET 200, GET 404 -> PUT 200 -> GET 404, PUT 200 -> PUT 200 -> GET 200 (old version), DELETE 200 -> GET 200 [ Takes time to delete]
 * No way for strong consistency
+
+### Route 53
+* Managed DNS service
+* A hostname to IPV4, AAAA - hostname to IPV6, CNAME hostname to hostname, Alias - Hostname to AWS resource
+* TTL - time to live is mandatory for route 53
+* cname - works only on non root domain [ subdomain ]
+* Alias - Works for both root and non root domain. Free, native health check
+* Split traffic is possible in route 53. Percentage wise we can split
+* Simple Routing policy - Random trafic
+* Weighted Routing Policy - Percentage wise we can split
+* Latency Routing policy - Based on low latency 
+* Health checker
+* Failover routing policy [ Primary and Secondary ]
+* GeoLocation Routing policy - Different from Latency policy [Specify traffic from specifi country]
+* Multi value policy - Kind of load balancer [ALB] with health check
+
+### AWS cli
