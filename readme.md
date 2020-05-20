@@ -114,3 +114,27 @@
 * Site-Site-VPN and Direct connect - Can't use vpc endpoints
 
 ### AWS cli
+* Custom role by adding policy using aws policy creator UI
+* Test role access by using policy simulator
+* use --dry-run option in aws cli
+* STS command line to decode error message
+* aws sts decode-authorization-message --encoded-message 
+* EC2 instance metadata url - http://169.254.169.254/latest/meta-data
+* Role name only can be retrieved not IAM policy
+* Meta data - infomation about EC2
+* user data - Startup script
+* aws configure --profile aws-office-aoount
+* aws s3 ls --profile aws-office-aoount
+* aws cli with MFA - Activate MFA for the user
+* aws sts get-session-token --serial-number $arn-of-the-mfa-device --token-code $code-from-token - Get the response
+* export AWS_ACCESS_KEY_ID=example-access-key-as-in-previous-output
+* export AWS_SECRET_ACCESS_KEY=example-secret-access-key-as-in-previous-output
+* export AWS_SESSION_TOKEN=example-session-token-as-in-previous-output
+* us-east-1 will be the default region if we didn't specify
+* Rate Limit - EC2 100 requests per second
+* S3 get - 5500 GET per second per object
+* For intermittent error [Throttling exception] -increase exponential backoff
+* For consistent error - Increase rate limit
+* service quota- 1152 vcpu, Can be increased by raising aws ticket
+* AWS cli - 1st pref command line, 2nd pref ENV var, 3rd .aws/config and .aws/credentials -> 4th container credentials -> 5th EC2 instance profile credentials
+* sigV4 - pass Authorization in request header or pass it as a query string to access s3
