@@ -138,3 +138,48 @@
 * service quota- 1152 vcpu, Can be increased by raising aws ticket
 * AWS cli - 1st pref command line, 2nd pref ENV var, 3rd .aws/config and .aws/credentials -> 4th container credentials -> 5th EC2 instance profile credentials
 * sigV4 - pass Authorization in request header or pass it as a query string to access s3
+
+### S3 MFA and Anthena
+* S3 MFA - To enable it we must enable versioning [ To avoid accidently  delete versioning of files stored in s3]
+* S3 MFA - needed for permanently delete object version, susbend versioning
+* S3 MFA - not needed for enabling version and listing deleted versions
+* Only bucket owner can enable and disable s3 MFA
+* MFA Delete can only be enabled by cli 
+* Instead of writing policy to enforce encryption use default encryption
+* S3 evaluvates bucket policy before default encryption
+* S3 access logs - create separate bucket for storing access logs for other buckets
+* Go to bucket -> enable logging -> select the bucket to store the logs
+* S3 - Same Region Replication[SRR] & Cross Region Replication[CRR]
+* Enable versioning to activate replication
+* SRR - log aggregation, live replication bw prod and test
+* CRR - compliance, lower latency access, replication across accounts
+* After activating replication only new objects replicated
+* It creates new IAM role
+* If u delete without version id - delete marker not replicated
+* If u delete with version is not replicated
+* There is no chaining of replication - bucket 1 -> replicated to bucket 2-> replicated to bucket 3[objects in 1 not replicated here]
+* S3 presigned URL can be generated from CLI and SDK
+* default 3600 seconds. Can be modified by --expires-in. Users get the permission of user who generated the URL
+* aws configure set default.s3.signature_version s3v4
+* aws s3 presign s3://awsexamplebucket/test2.txt --expires-in 604800
+* S3 storage classes 
+* S3 standard General Purpose -Frequent access data
+* S3 standard Infrequent Access [IA] - Backup, Data recovery , no retrieve fee, , 30 days
+* S3 one zone IA - Low latency, High throughput, but not reliable. Store data that can be recreated easily, 30 days, non crtical data
+* S3 inteligent tiering - automaticaly moves ur data to IA from Standard, , no retrieve fee
+* S3 Glacier - Archieve - min storage 90 days
+* S3 glacier deep Archieve - min storage 180 days 
+* Use S3 lifecycle to move data between different storage classes
+* S3 performance - 3500 PUT/DELETE/, 5500 GET - KMS affects performance
+* Use multipart upload for files > 100 MB must for 5GB. It help parallel upload
+* S3 transfer acceleration[upload only] - use aws edge location
+* Use S3 select and Glacier select to filter data -> 400% speed, 80% cheaper 
+* S3 event notification - SNS, SQS, Lambda
+* AWS athena - Perform analytics on data stored directly on S3 - GCP bigQuery
+
+### CoudFront
+* CDN
+* S3, ELB, EC2 public can be exposed via CDN
+* Create s3 bucket -> create cloudfront with s3 target -> create origin access identity -> so that only cloudfront can expose the content
+* Invalidate cache and mention TTL to clear cache stored in CDN
+* 
