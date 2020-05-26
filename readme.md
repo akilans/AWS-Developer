@@ -182,4 +182,28 @@
 * S3, ELB, EC2 public can be exposed via CDN
 * Create s3 bucket -> create cloudfront with s3 target -> create origin access identity -> so that only cloudfront can expose the content
 * Invalidate cache and mention TTL to clear cache stored in CDN
-* 
+
+### ECS
+* ECS task placement strategy - binback[ meory - fill ec2 then go for other ec2- save cost], random - place randomly, spread based on AZ or instance ID- improves HA
+* ECS task placement Contraints - DistinctInstance - place in different instance, MemberOf - Place task using query based on machine type etc
+* ECS service auto scaling is not equal to ec2 auto scaling
+* Each svc cpu, memory captured in cloud watch
+* Target Tracking based on cloud watch metric, Step Scaling based on cloud watch alarm, Scheduled scaling based on predictable changes
+* Cluster capacity provider is used to autoscale EC2 and Fargate
+
+### ElasticBeanStalk
+* Application with environments - It will spin up EC2, ASG, ELB, SG, Logs, Monitoring, S3 etc for you
+* Single instance great for dev and High available is good for prod [ELB, ASG, EC2 etc]
+* Types of Deployment mode - All at once[fast, downtime, less cost], Rolling update[no additional cost, slow deployment time,un both versions simultaneously], Rolling update with additional batches [new instances created so old appplication available, small additional cost, slow deployment, run both versions simultaneously, good for prod], Immutable - spin up new instances with new ASG, once all healthy it deletes all the old instances [high cost, double capacity, quick rollback], blue/green not direct feature of ElasticBeanstalk but can be done with swap url and create blue/green environment and use route 53 to route traffic partially
+* eb cli useful to create, deploy, monitor, logs application
+* eb create, deploy, config, status, events, logs, terminate, health, open
+* EBS can store 1000 application versions. Use lifecycle policy to cleanup versions. If it reached 1000, new application version cannot be deployed. Current deployed version cannot be deleted
+* .ebextensions/ - yaml/json format - UI parameter can be stored as file. all ends with .config file.Able to add RDS, Dynamodb , elasticache
+* CloudFormation is used in the background to create the env
+* ElasticBean Cloning is used copy the exact env with configuration
+* EBS migration - Load Balancer - can't change ELB after configuration. So to migrate create new env same as old except ELB. Deploy application and use Route 53 to swap URL
+* Don't create db with EBS - It will get deleted if EBS deleted. Create snapshot of RDS, Enable delete protection, Create new EBS env, Route 53 swap, delete old EBS(rds won't get deleted, ) 
+* EBS - single Docker container - Provide dockerfile or dockerfile.aws.json file. Does't use ECS
+* EBS - multi Docker container - spin up ECS cluster, ELB, EC2 , Task def etc. dockerfile.aws.json used to generate task def
+* HTTPS can be configured by loading SSL cert to Load Balancer or .ebextension/securelistener-elb.config
+* EBSs support custom platform as well. If ur app not supports the languages and docker go for custom platform
