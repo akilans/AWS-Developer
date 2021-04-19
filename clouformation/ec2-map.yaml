@@ -1,0 +1,37 @@
+---
+Mappings:
+  RegionMapExample:
+    us-east-1:
+      amazonLinux: "ami-0742b4e673072066f"
+      ubuntuLinux: "ami-042e8287309f5df03"
+    us-east-2:
+      amazonLinux: "ami-05d72852800cbf29e"
+      ubuntuLinux: "ami-08962a4068733a2b6"
+  InstanceSizeMap:
+    development:
+      size: "t2.micro"
+    production:
+      size: "t2.large"
+Parameters:
+  myKeyPair: 
+    Description: Amazon EC2 Key Pair
+    Type: AWS::EC2::KeyPair::KeyName
+  myAZ: 
+    Description: Select Availability Zone
+    Type: AWS::EC2::AvailabilityZone::Name
+  EnvironmentName:
+    Description: Environment Name
+    Type: String
+    AllowedValues: [development, production]
+    ConstraintDescription: must be development or production
+
+Resources:
+  MyEc2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !FindInMap [InstanceSizeMap, !Ref "EnvironmentName", size]
+      AvailabilityZone: 
+        Ref: myAZ
+      ImageId: !FindInMap [RegionMapExample, !Ref "AWS::Region", amazonLinux]
+      KeyName:
+        Ref: myKeyPair

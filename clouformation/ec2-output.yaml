@@ -1,0 +1,26 @@
+---
+Parameters:
+  myKeyPair: 
+    Description: Amazon EC2 Key Pair
+    Type: AWS::EC2::KeyPair::KeyName
+  myAZ: 
+    Description: Select Availability Zone
+    Type: AWS::EC2::AvailabilityZone::Name
+
+Resources:
+  MyEc2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      AvailabilityZone: 
+        Ref: myAZ
+      ImageId: ami-0742b4e673072066f
+      KeyName:
+        Ref: myKeyPair
+
+Outputs:
+  MyInstanceId:
+      Description: Print the id of the EC2 instance
+      Value: !Ref MyEc2Instance
+      Export:
+        Name: MyEc2Instance

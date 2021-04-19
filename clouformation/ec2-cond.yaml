@@ -1,0 +1,59 @@
+---
+Parameters:
+  myKeyPair: 
+    Description: Amazon EC2 Key Pair
+    Type: AWS::EC2::KeyPair::KeyName
+  myAZ: 
+    Description: Select Availability Zone
+    Type: AWS::EC2::AvailabilityZone::Name
+  attachVolume: 
+    Description: Add extra volume
+    Default: yes
+    Type: String
+    AllowedValues:
+    - yes
+    - no
+
+Conditions:
+  AttachVolume: !Equals [ !Ref attachVolume, yes ]
+
+Resources:
+  MyEc2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      AvailabilityZone: 
+        Ref: myAZ
+      ImageId: ami-0742b4e673072066f
+      KeyName:
+        Ref: myKeyPair
+
+  MyEc2Volume:
+    Type: AWS::EC2::Volume
+    Condition: AttachVolume
+    Properties: 
+      Size: 50
+      #AvailabilityZone: !Ref myAZ
+      AvailabilityZone: !GetAtt MyEc2Instance.AvailabilityZone
+      Tags:
+        - Key: Name
+          Value: MyEc2Volume
+  VolumeMount:
+    Type: AWS::EC2::VolumeAttachment
+    Condition: AttachVolume
+    Properties: 
+      Device: /dev/sdh
+      InstanceId: !Ref MyEc2Instance
+      VolumeId: !Ref MyEc2Volume
+
+Outputs:
+  MyInstanceId:
+      Description: Print the id of the EC2 instance
+      Value: !Ref MyEc2Instance
+      Export:
+        Name: MyEc2Instance
+  MyVolumeId:
+      Description: Print the id of the Volume
+      Value: !Ref MyEc2Volume
+      Export:
+        Name: MyEc2Volume
